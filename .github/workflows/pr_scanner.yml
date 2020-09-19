@@ -12,9 +12,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: run bandit on pr only
       run: |
-        sudo apt update && sudo apt install -y python-pip python-setuptools
-        pip install bandit
-        which bandit
+        sudo apt update && sudo apt install snapd && sudo snap install bandit
         BANDIT_CONFIGSTRING="--verbose -s B322" #Do not support Python2
         FULLRUN_TARGET=${TARGET_DIR:-""}
         EXCLUDED=${BANDIT_EXCLUDE:-"*/tests/*,*/settings/local.py"}
