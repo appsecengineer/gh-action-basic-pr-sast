@@ -14,6 +14,7 @@ jobs:
       run: |
         sudo apt update && sudo apt install -y python-pip python-setuptools
         pip install bandit
+        which bandit
         BANDIT_CONFIGSTRING="--verbose -s B322" #Do not support Python2
         FULLRUN_TARGET=${TARGET_DIR:-""}
         EXCLUDED=${BANDIT_EXCLUDE:-"*/tests/*,*/settings/local.py"}
