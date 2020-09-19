@@ -1,0 +1,42 @@
+name: Pull Request SAST Scan
+on:
+  pull_request:
+    branches:
+      - test
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: npm install
+      run: |
+        pip3 install bandit
+        BANDIT_CONFIGSTRING="--verbose -s B322" #Do not support Python2
+        FULLRUN_TARGET=${TARGET_DIR:-""}
+        EXCLUDED=${BANDIT_EXCLUDE:-"*/tests/*,*/settings/local.py"}
+        BANDIT_REPORT=${BANDIT_REPORT:-"$HOME/bandit_report.out"}
+        if [ -z "$GITHUB_HEAD_REF" ]; then
+          echo "Running Bandit on all files, excluding \"$EXCLUDED\""
+          bandit $BANDIT_CONFIGSTRING -r "./$FULLRUN_TARGET" -x "$EXCLUDED" -o $BANDIT_REPORT -f txt
+        else
+          git fetch ${GITHUB_BASE_REF/#/'origin '} &>/dev/null
+          git fetch ${GITHUB_HEAD_REF/#/'origin '} &>/dev/null
+          BASE_REF=$(git rev-parse ${GITHUB_BASE_REF/#/'origin/'})
+          HEAD_REF=$(git rev-parse ${GITHUB_HEAD_REF/#/'origin/'})
+          FILES=$(git diff --name-only $BASE_REF $HEAD_REF -- '*.py')
+
+          if [ -z "$FILES" ]; then
+            echo "No files for Bandit to check" | tee $BANDIT_REPORT bandit_stdout
+          else
+            echo "Running Bandit on $FILES"
+            bandit $BANDIT_CONFIGSTRING -x "$EXCLUDED" -o $BANDIT_REPORT -f txt $FILES
+            bandit $BANDIT_CONFIGSTRING -x "$EXCLUDED" -o bandit_stdout  -f custom --msg-template "$MSG_TEMPLATE" $FILES
+            RC=$?
+          fi
+        fi
+        echo "======================"
+        cat $BANDIT_REPORT
+        echo "======================"
+        echo "::set-output name=<bandit_stdout>::$(cat bandit_stdout)"
