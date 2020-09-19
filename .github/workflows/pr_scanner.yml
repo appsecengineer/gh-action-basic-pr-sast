@@ -2,7 +2,7 @@ name: Pull Request SAST Scan
 on:
   pull_request:
     branches:
-      - test
+      - main
 
 
 jobs:

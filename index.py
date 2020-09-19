@@ -1,5 +1,5 @@
-from hashlib import sha1
+from hashlib import md5
 
 def load_pass(password):
     password = "helloworld"
-    sha1(password.encode()).hexdigest()
+    md5(password.encode()).hexdigest()
