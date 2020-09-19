@@ -31,7 +31,6 @@ jobs:
           else
             echo "Running Bandit on $FILES"
             bandit $BANDIT_CONFIGSTRING -o $BANDIT_REPORT -f txt $FILES
-            bandit $BANDIT_CONFIGSTRING -o bandit_stdout  -f custom --msg-template "$MSG_TEMPLATE" $FILES
             RC=$?
           fi
         fi
