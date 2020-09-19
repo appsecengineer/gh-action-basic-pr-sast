@@ -10,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: npm install
+    - name: run bandit on pr only
       run: |
+        apt update && apt install python3-pip
         pip3 install bandit
         BANDIT_CONFIGSTRING="--verbose -s B322" #Do not support Python2
         FULLRUN_TARGET=${TARGET_DIR:-""}
