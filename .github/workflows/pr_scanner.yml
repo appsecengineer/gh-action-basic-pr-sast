@@ -2,7 +2,7 @@ name: Pull Request SAST Scan
 on:
   pull_request:
     branches:
-      - test
+      - main
 
 
 jobs:
@@ -10,16 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: npm install
+    - name: run bandit on pr only
       run: |
-        pip3 install bandit
+        sudo apt update && sudo apt install snapd && sudo snap install bandit
         BANDIT_CONFIGSTRING="--verbose -s B322" #Do not support Python2
         FULLRUN_TARGET=${TARGET_DIR:-""}
-        EXCLUDED=${BANDIT_EXCLUDE:-"*/tests/*,*/settings/local.py"}
         BANDIT_REPORT=${BANDIT_REPORT:-"$HOME/bandit_report.out"}
         if [ -z "$GITHUB_HEAD_REF" ]; then
           echo "Running Bandit on all files, excluding \"$EXCLUDED\""
-          bandit $BANDIT_CONFIGSTRING -r "./$FULLRUN_TARGET" -x "$EXCLUDED" -o $BANDIT_REPORT -f txt
+          bandit $BANDIT_CONFIGSTRING -r "./$FULLRUN_TARGET" -o $BANDIT_REPORT -f txt
         else
           git fetch ${GITHUB_BASE_REF/#/'origin '} &>/dev/null
           git fetch ${GITHUB_HEAD_REF/#/'origin '} &>/dev/null
@@ -31,8 +30,7 @@ jobs:
             echo "No files for Bandit to check" | tee $BANDIT_REPORT bandit_stdout
           else
             echo "Running Bandit on $FILES"
-            bandit $BANDIT_CONFIGSTRING -x "$EXCLUDED" -o $BANDIT_REPORT -f txt $FILES
-            bandit $BANDIT_CONFIGSTRING -x "$EXCLUDED" -o bandit_stdout  -f custom --msg-template "$MSG_TEMPLATE" $FILES
+            bandit $BANDIT_CONFIGSTRING -o $BANDIT_REPORT -f txt $FILES
             RC=$?
           fi
         fi
