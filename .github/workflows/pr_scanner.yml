@@ -30,7 +30,7 @@ jobs:
             echo "No files for Bandit to check" | tee $BANDIT_REPORT bandit_stdout
           else
             echo "Running Bandit on $FILES"
-            bandit -o $BANDIT_REPORT -f txt $FILES
+            bandit $FILES
             RC=$?
           fi
         fi
