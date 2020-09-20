@@ -40,10 +40,13 @@ jobs:
         echo "::set-output name=<bandit_stdout>::$(cat bandit_stdout)"
         export RESULTS=$(cat /home/runner/bandit_report.out)
         echo "::set-env name=RESULTS::$RESULTS"
+    - name: access results
+      run : |
+        echo $RESULTS
     - name: comment on PR
       uses: unsplash/comment-on-pr@master
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with: 
-        msg: $RESULTS
+        msg: "Review: $RESULTS"
         check_for_duplicate_msg: true
