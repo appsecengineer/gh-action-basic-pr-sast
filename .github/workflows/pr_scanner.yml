@@ -39,6 +39,7 @@ jobs:
         echo "======================"
         echo "::set-output name=<bandit_stdout>::$(cat bandit_stdout)"
         export RESULTS=$(cat /home/runner/bandit_report.out)
+        echo "::set-env name=RESULTS::$RESULTS"
     - name: comment on PR
       uses: unsplash/comment-on-pr@master
       env:
