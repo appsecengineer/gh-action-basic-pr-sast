@@ -44,5 +44,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with: 
-        msg: "$RESULTS"
+        msg: "Review Result: $RESULTS"
         check_for_duplicate_msg: true
