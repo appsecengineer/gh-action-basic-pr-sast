@@ -30,7 +30,7 @@ jobs:
             echo "No files for Bandit to check" | tee $BANDIT_REPORT bandit_stdout
           else
             echo "Running Bandit on $FILES"
-            bandit $FILES
+            bandit -o $BANDIT_REPORT -f txt $FILES || true
             RC=$?
           fi
         fi
@@ -38,3 +38,12 @@ jobs:
         cat $BANDIT_REPORT
         echo "======================"
         echo "::set-output name=<bandit_stdout>::$(cat bandit_stdout)"
+        export RESULTS=$(cat /home/runner/bandit_report.out)
+        echo "::set-env name=RESULTS::$RESULTS"
+    - name: comment on PR
+      uses: unsplash/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with: 
+        msg: "Review Result: $RESULTS"
+        check_for_duplicate_msg: true
