@@ -38,8 +38,7 @@ jobs:
         cat $BANDIT_REPORT
         echo "======================"
         echo "::set-output name=<bandit_stdout>::$(cat bandit_stdout)"
-        export RESULTS=$(cat /home/runner/bandit_report.out)
-        echo ::set-env name=RESULTS::"$RESULTS"
+        echo "::set-env name=RESULTS::$(cat /home/runner/bandit_report.out)"
     - name: access results
       run : |
         echo $RESULTS
