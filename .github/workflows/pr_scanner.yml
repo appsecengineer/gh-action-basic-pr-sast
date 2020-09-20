@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: run bandit on pr only
       run: |
-        sudo apt update && sudo apt install snapd && sudo snap install bandit
+        sudo snap install bandit
         BANDIT_CONFIGSTRING="--verbose -s B322" #Do not support Python2
         FULLRUN_TARGET=${TARGET_DIR:-""}
         BANDIT_REPORT=${BANDIT_REPORT:-"$HOME/bandit_report.out"}
@@ -30,7 +30,7 @@ jobs:
             echo "No files for Bandit to check" | tee $BANDIT_REPORT bandit_stdout
           else
             echo "Running Bandit on $FILES"
-            bandit $BANDIT_CONFIGSTRING -o $BANDIT_REPORT -f txt $FILES
+            bandit $FILES
             RC=$?
           fi
         fi
