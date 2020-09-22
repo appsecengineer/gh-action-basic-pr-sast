@@ -42,5 +42,5 @@ jobs:
     - name: comment on PR
       uses: JoseThen/comment-pr@v1
       with: 
-        comment: "Review: $BANDIT_RESULTS"
+        comment: '$BANDIT_RESULTS'
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
