@@ -46,4 +46,4 @@ jobs:
       with: 
         message: |
           ## Bandit Results
-          $HELLO_ABHAY
+          ${{ HELLO_ABHAY }}
