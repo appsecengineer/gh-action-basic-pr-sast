@@ -39,14 +39,8 @@ jobs:
         echo "======================"
         echo "::set-env name=BANDIT_RESULTS::$(cat $HOME/bandit_report.out)"
         echo "::set-env name=HELLO_ABHAY::AbhayBhargav"
-    - name: access results
-      run : |
-        echo $BANDIT_RESULTS
-        echo $HELLO_ABHAY
     - name: comment on PR
-      uses: unsplash/comment-on-pr@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      uses: JoseThen/comment-pr@v1
       with: 
-        msg: "Review: $BANDIT_RESULTS"
-        check_for_duplicate_msg: false
+        comment: "Review: $BANDIT_RESULTS"
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
