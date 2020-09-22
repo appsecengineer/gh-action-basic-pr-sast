@@ -40,7 +40,11 @@ jobs:
         echo "::set-env name=BANDIT_RESULTS::$(cat $HOME/bandit_report.out)"
         echo "::set-env name=HELLO_ABHAY::AbhayBhargav"
     - name: comment on PR
-      uses: JoseThen/comment-pr@v1
+      uses: mshick/add-pr-comment@v1
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BANDIT_RESULTS: $BANDIT_RESULTS
       with: 
-        comment: '$BANDIT_RESULTS'
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        message: |
+          ## Bandit Results
+          $BANDIT_RESULTS
