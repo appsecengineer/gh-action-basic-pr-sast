@@ -2,7 +2,7 @@ name: Pull Request SAST Scan
 on:
   pull_request:
     branches:
-      - main
+      - test
 
 
 jobs:
@@ -37,4 +37,3 @@ jobs:
         echo "======================"
         cat $BANDIT_REPORT
         echo "======================"
-        echo "::set-env name=BANDIT_RESULTS::$(cat $HOME/bandit_report.out)"
